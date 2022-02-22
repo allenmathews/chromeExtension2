@@ -2,24 +2,17 @@ let myLeads = []
 const inputEl = document.getElementById("input-el")
 const inputBtn = document.getElementById("input-btn")
 const ulEl = document.getElementById("ul-el")
+const deleteBtn = document.getElementById("delete-btn")
+const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
 
-// Get the leads from the localStorage - PS: JSON.parse()
-// Store it in a variable, leadsFromLocalStorage
-// Log out the variable
-localStorage.clear()
-let leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
-
-console.log(leadsFromLocalStorage)
-
-inputBtn.addEventListener("click", function() {
-    myLeads.push(inputEl.value)
-    inputEl.value = ""
-    localStorage.setItem("myLeads", JSON.stringify(myLeads))
+if (leadsFromLocalStorage) {
+    myLeads = leadsFromLocalStorage
     renderLeads()
+}
 
-    // To verify that it works:
-    console.log(localStorage.getItem("myLeads"))
-})
+// Refector the function so that it takes a parameter, leads, that it uses
+// instead of the global myLeads variable. Remember to update all invocations 
+// of the function as well.
 
 function renderLeads() {
     let listItems = ""
@@ -34,3 +27,16 @@ function renderLeads() {
     }
     ulEl.innerHTML = listItems
 }
+
+deleteBtn.addEventListener("dblclick", function() {
+    localStorage.clear()
+    myLeads = []
+    renderLeads()
+})
+
+inputBtn.addEventListener("click", function() {
+    myLeads.push(inputEl.value)
+    inputEl.value = ""
+    localStorage.setItem("myLeads", JSON.stringify(myLeads))
+    renderLeads()
+})
